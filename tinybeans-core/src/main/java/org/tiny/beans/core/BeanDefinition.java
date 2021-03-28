@@ -1,12 +1,14 @@
 package org.tiny.beans.core;
 
+import org.tiny.beans.sdk.ScopeType;
+
 public class BeanDefinition {
 
     //类对象
     private Class beanClass;
 
-    //单例
-    private String scope;
+    //原型or单例
+    private ScopeType scopeType;
 
     //懒加载
     private Boolean lazy;
@@ -20,19 +22,19 @@ public class BeanDefinition {
         this.beanClass = beanClass;
     }
 
-    public String getScope() {
-        return scope;
-    }
-
-    public void setScope(String scope) {
-        this.scope = scope;
-    }
-
     public Boolean getLazy() {
         return lazy;
     }
 
     public void setLazy(Boolean lazy) {
         this.lazy = lazy;
+    }
+
+    public ScopeType getScopeType() {
+        return scopeType;
+    }
+
+    public void setScopeType(ScopeType scopeType) {
+        this.scopeType = scopeType;
     }
 }

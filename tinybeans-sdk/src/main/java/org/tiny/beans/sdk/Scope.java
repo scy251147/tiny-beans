@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface Scope {
 
-    String value() default "singleton";
+    ScopeType value() default ScopeType.Singleton;
 
 }

@@ -50,11 +50,11 @@ public class BeanContext {
                 //原型
                 if (clazz.isAnnotationPresent(Scope.class)) {
                     Scope scopeAnnotation = (Scope) clazz.getAnnotation(Scope.class);
-                    beanDefinition.setScope(scopeAnnotation.value());
+                    beanDefinition.setScopeType(scopeAnnotation.value());
                 }
                 //单例
                 else {
-                    beanDefinition.setScope("singleton");
+                    beanDefinition.setScopeType(ScopeType.Singleton);
                 }
                 beanDefinitionMap.put(beanName, beanDefinition);
 
@@ -67,7 +67,7 @@ public class BeanContext {
         for(String beanName: beanDefinitionMap.keySet()) {
             BeanDefinition beanDefinition = beanDefinitionMap.get(beanName);
             //创建单例bean
-            if (beanDefinition.getScope().equals("singleton")) {
+            if (beanDefinition.getScopeType() == ScopeType.Singleton) {
                 if (!singletonObjectPool.containsKey(beanName)) {
                     Object bean = createBean(beanName, beanDefinition);
                     singletonObjectPool.put(beanName, bean);
@@ -165,12 +165,12 @@ public class BeanContext {
     public Object getBean(String beanName) {
         BeanDefinition beanDefinition = beanDefinitionMap.get(beanName);
         //原型模式，每次都需要创建bean
-        if (beanDefinition.getScope().equals("prototype")) {
+        if (beanDefinition.getScopeType() == ScopeType.Prototype) {
             Object bean = createBean(beanName, beanDefinition);
             return bean;
         }
         //单例模式，直接返回原有bean
-        else if (beanDefinition.getScope().equals("singleton")) {
+        else if (beanDefinition.getScopeType() == ScopeType.Singleton) {
             Object object = singletonObjectPool.get(beanName);
             if (object == null) {
                 object = createBean(beanName, beanDefinition);
