@@ -2,7 +2,7 @@ package org.tiny.beans.core.exception;
 
 /**
  * @author shichaoyang
- * @Description: 错误
+ * @Description: 其他未知错误
  * @date 2021-03-29 10:48
  */
 public class TinyBeanException extends Exception{
