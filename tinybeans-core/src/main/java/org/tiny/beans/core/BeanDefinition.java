@@ -1,6 +1,6 @@
 package org.tiny.beans.core;
 
-import org.tiny.beans.sdk.ScopeType;
+import org.tiny.beans.sdk.model.ScopeType;
 
 public class BeanDefinition {
 

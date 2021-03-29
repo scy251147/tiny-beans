@@ -1,6 +1,6 @@
 package org.tiny.beans.test.model;
 
-import org.tiny.beans.sdk.Bean;
+import org.tiny.beans.sdk.annotation.Bean;
 
 @Bean("user")
 public class User {

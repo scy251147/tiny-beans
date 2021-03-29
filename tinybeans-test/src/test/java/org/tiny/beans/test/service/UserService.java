@@ -1,8 +1,8 @@
 package org.tiny.beans.test.service;
 
-import org.tiny.beans.sdk.Inject;
-import org.tiny.beans.sdk.BeanScan;
-import org.tiny.beans.sdk.BeanInit;
+import org.tiny.beans.sdk.annotation.Inject;
+import org.tiny.beans.sdk.annotation.BeanScan;
+import org.tiny.beans.sdk.func.BeanInit;
 import org.tiny.beans.test.model.User;
 
 @BeanScan("userService")

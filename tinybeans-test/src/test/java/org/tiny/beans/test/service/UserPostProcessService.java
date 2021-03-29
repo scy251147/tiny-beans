@@ -1,7 +1,7 @@
 package org.tiny.beans.test.service;
 
-import org.tiny.beans.sdk.Bean;
-import org.tiny.beans.sdk.BeanPost;
+import org.tiny.beans.sdk.annotation.Bean;
+import org.tiny.beans.sdk.func.BeanPost;
 
 /**
  * 可以做初始化前和初始化后的工作，这里可以实现真正意义的动态代理
