@@ -1,5 +1,7 @@
 package org.tiny.beans.core;
 
+import org.tiny.beans.core.exception.TinyBeanClassNotFoundException;
+import org.tiny.beans.core.model.BeanDefinition;
 import org.tiny.beans.sdk.annotation.Bean;
 import org.tiny.beans.sdk.annotation.BeanScan;
 import org.tiny.beans.sdk.annotation.Inject;
@@ -111,14 +113,16 @@ public class BeanContext {
             File[] files = file.listFiles();
             for (File f : files) {
                 String absoltePath = f.getAbsolutePath();
-                absoltePath = absoltePath.substring(absoltePath.indexOf("org"), absoltePath.indexOf("class"));
-                absoltePath = absoltePath.replace("\\", ".");
-                try {
-                    Class<?> clazz = classLoader.loadClass(absoltePath);
-                    //这里需要判断下annotation是否存在
-                    classList.add(clazz);
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
+                if(absoltePath.endsWith(".class")) {
+                    absoltePath = absoltePath.substring(absoltePath.indexOf("org"), absoltePath.indexOf(".class"));
+                    absoltePath = absoltePath.replace("\\", ".");
+                    try {
+                        Class<?> clazz = classLoader.loadClass(absoltePath);
+                        //这里需要判断下annotation是否存在
+                        classList.add(clazz);
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }

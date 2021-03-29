@@ -1,4 +1,4 @@
-package org.tiny.beans.core;
+package org.tiny.beans.core.model;
 
 import org.tiny.beans.sdk.model.ScopeType;
 
