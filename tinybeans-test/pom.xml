@@ -30,6 +30,12 @@
             <version>1.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
+        <!--unit test-->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.0.2</version>
+        </dependency>
     </dependencies>
 
 </project>

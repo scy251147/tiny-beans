@@ -1,12 +1,19 @@
 package org.tiny.beans.test;
 
+import org.junit.jupiter.api.Test;
 import org.tiny.beans.core.BeanContext;
+import org.tiny.beans.test.service.UserService;
 
 public class BeanTest {
 
-    public static void main(String[] args) {
+    @Test
+    public void test(){
 
         BeanContext beanContext = new BeanContext(BeanConfig.class);
+
+        UserService userService = (UserService) beanContext.getBean("userService");
+
+        System.out.println(userService);
 
     }
 
