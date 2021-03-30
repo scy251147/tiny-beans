@@ -13,6 +13,8 @@ public class BeanTest {
 
         UserService userService = (UserService) beanContext.getBean("userService");
 
+        //null pinter exception, need check path
+
         System.out.println(userService);
 
     }
