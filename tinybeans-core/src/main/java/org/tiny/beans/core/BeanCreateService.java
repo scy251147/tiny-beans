@@ -17,6 +17,7 @@ public class BeanCreateService {
 
     /**
      * 带参构造
+     *
      * @param beanContext
      */
     public BeanCreateService(BeanContext beanContext) {
@@ -43,62 +44,14 @@ public class BeanCreateService {
     }
 
     /**
-     * 创建bean实例
-     * @param beanName
-     * @param beanDefinition
-     * @return
-     */
-    private Object createBean(String beanName, BeanDefinition beanDefinition) {
-        try {
-            //1. 类实例化
-            Class beanClass = beanDefinition.getBeanClass();
-            Object object = beanClass.getDeclaredConstructor().newInstance();
-
-            //2. 属性填充, 将userService中的user对象填充进去
-            Field[] declaredFields = beanClass.getDeclaredFields();
-            for (Field declaredField : declaredFields) {
-                if (declaredField.isAnnotationPresent(Inject.class)) {
-                    Object bean = getBean(declaredField.getName());
-                    declaredField.setAccessible(true);
-                    declaredField.set(object, bean);
-                }
-            }
-
-            //3. 初始化前处理
-            for (BeanPost beanPost : beanContext.getBeanPostAnnotationPool()) {
-                object = beanPost.postProcessBeforeInitialization(object, beanName);
-            }
-
-            //4. 用户自定义初始化
-            if (object instanceof BeanInit) {
-                ((BeanInit) (object)).afterPropertiesSet();
-            }
-
-            //5. 初始化后处理
-            for (BeanPost beanPost : beanContext.getBeanPostAnnotationPool()) {
-                object = beanPost.postProcessAfterInitialization(object, beanName);
-            }
-            return object;
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
      * 获取bean实例
+     *
      * @param beanName
      * @return
      */
     protected Object getBean(String beanName) {
         BeanDefinition beanDefinition = beanContext.getBeanDefinitionPool().get(beanName);
-        if(beanDefinition == null){
+        if (beanDefinition == null) {
             return null;
         }
         //原型模式，每次都需要创建bean
@@ -116,6 +69,79 @@ public class BeanCreateService {
             return object;
         }
         return null;
+    }
+
+    /**
+     * 创建bean实例
+     *
+     * @param beanName
+     * @param beanDefinition
+     * @return
+     */
+    private Object createBean(String beanName, BeanDefinition beanDefinition) {
+        //1. 类实例化
+        Class beanClass = beanDefinition.getBeanClass();
+        Object beanObject = newBeanInstance(beanClass);
+
+        //2. 属性填充, 将userService中的user对象填充进去
+        injectBeanSet(beanClass, beanObject);
+
+        //3. 初始化前处理
+        for (BeanPost beanPost : beanContext.getBeanPostAnnotationPool()) {
+            beanObject = beanPost.postProcessBeforeInitialization(beanObject, beanName);
+        }
+
+        //4. 用户自定义初始化
+        if (beanObject instanceof BeanInit) {
+            ((BeanInit) (beanObject)).afterPropertiesSet();
+        }
+
+        //5. 初始化后处理
+        for (BeanPost beanPost : beanContext.getBeanPostAnnotationPool()) {
+            beanObject = beanPost.postProcessAfterInitialization(beanObject, beanName);
+        }
+        return beanObject;
+    }
+
+    /**
+     * 将class创建出实例出来
+     * @param beanClass
+     * @return
+     */
+    private Object newBeanInstance(Class beanClass) {
+        try {
+            Object object = beanClass.getDeclaredConstructor().newInstance();
+            return object;
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 将beanClass中的inject字段的属性赋值
+     * @param beanClass
+     * @param object
+     */
+    private void injectBeanSet(Class beanClass, Object object) {
+        Field[] declaredFields = beanClass.getDeclaredFields();
+        for (Field declaredField : declaredFields) {
+            if (declaredField.isAnnotationPresent(Inject.class)) {
+                Object bean = getBean(declaredField.getName());
+                declaredField.setAccessible(true);
+                try {
+                    declaredField.set(object, bean);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
 }
