@@ -1,5 +1,6 @@
 package org.tiny.beans.core;
 
+import org.tiny.beans.core.model.BeanContext;
 import org.tiny.beans.core.model.BeanDefinition;
 import org.tiny.beans.sdk.annotation.Inject;
 import org.tiny.beans.sdk.func.BeanInit;
@@ -7,10 +8,6 @@ import org.tiny.beans.sdk.func.BeanPost;
 import org.tiny.beans.sdk.model.ScopeType;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author shichaoyang
@@ -19,20 +16,40 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class BeanCreateService {
 
-    public BeanCreateService(Map<String, BeanDefinition> beanDefinitionMap, Map<String, Object> singletonObjectPool, List<BeanPost> beanPosts) {
-        this.beanDefinitionMap = beanDefinitionMap;
-        this.singletonObjectPool = singletonObjectPool;
-        this.beanPosts = beanPosts;
+    /**
+     * 带参构造
+     * @param beanContext
+     */
+    public BeanCreateService(BeanContext beanContext) {
+        this.beanContext = beanContext;
     }
 
-    private Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>();
+    //上下文对象
+    private BeanContext beanContext;
 
-    private Map<String, Object> singletonObjectPool = new ConcurrentHashMap<>();
+    /**
+     * 创建单例bean实例，原型bean实例无需创建，因为每次都会new新的出来
+     */
+    protected void createSingletonBean() {
+        for (String beanName : beanContext.getBeanDefinitionPool().keySet()) {
+            BeanDefinition beanDefinition = beanContext.getBeanDefinitionPool().get(beanName);
+            //创建单例bean
+            if (beanDefinition.getScopeType() == ScopeType.Singleton) {
+                if (!beanContext.getBeanSingletonPool().containsKey(beanName)) {
+                    Object bean = createBean(beanName, beanDefinition);
+                    beanContext.getBeanSingletonPool().put(beanName, bean);
+                }
+            }
+        }
+    }
 
-    private List<BeanPost> beanPosts = new ArrayList<>();
-
-
-    public Object createBean(String beanName, BeanDefinition beanDefinition) {
+    /**
+     * 创建bean实例
+     * @param beanName
+     * @param beanDefinition
+     * @return
+     */
+    private Object createBean(String beanName, BeanDefinition beanDefinition) {
         try {
             //1. 类实例化
             Class beanClass = beanDefinition.getBeanClass();
@@ -49,7 +66,7 @@ public class BeanCreateService {
             }
 
             //3. 初始化前处理
-            for (BeanPost beanPost : beanPosts) {
+            for (BeanPost beanPost : beanContext.getBeanPostAnnotationPool()) {
                 object = beanPost.postProcessBeforeInitialization(beanPost, beanName);
             }
 
@@ -59,7 +76,7 @@ public class BeanCreateService {
             }
 
             //5. 初始化后处理
-            for (BeanPost beanPost : beanPosts) {
+            for (BeanPost beanPost : beanContext.getBeanPostAnnotationPool()) {
                 object = beanPost.postProcessAfterInitialization(beanPost, beanName);
             }
             return object;
@@ -75,8 +92,13 @@ public class BeanCreateService {
         return null;
     }
 
-    public Object getBean(String beanName) {
-        BeanDefinition beanDefinition = beanDefinitionMap.get(beanName);
+    /**
+     * 获取bean实例
+     * @param beanName
+     * @return
+     */
+    protected Object getBean(String beanName) {
+        BeanDefinition beanDefinition = beanContext.getBeanDefinitionPool().get(beanName);
         //原型模式，每次都需要创建bean
         if (beanDefinition.getScopeType() == ScopeType.Prototype) {
             Object bean = createBean(beanName, beanDefinition);
@@ -84,10 +106,10 @@ public class BeanCreateService {
         }
         //单例模式，直接返回原有bean
         else if (beanDefinition.getScopeType() == ScopeType.Singleton) {
-            Object object = singletonObjectPool.get(beanName);
+            Object object = beanContext.getBeanSingletonPool().get(beanName);
             if (object == null) {
                 object = createBean(beanName, beanDefinition);
-                singletonObjectPool.put(beanName, beanDefinition);
+                beanContext.getBeanSingletonPool().put(beanName, beanDefinition);
             }
             return object;
         }

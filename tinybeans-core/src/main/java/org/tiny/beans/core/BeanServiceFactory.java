@@ -17,7 +17,7 @@ public class BeanServiceFactory {
         this.beanContext = beanContext;
     }
 
-    //扫描路径配置类
+    //上下文对象
     private BeanContext beanContext;
 
     //扫描bean服务
@@ -54,21 +54,6 @@ public class BeanServiceFactory {
     }
 
     /**
-     * 创建beancreate服务实例
-     * @return
-     */
-    protected BeanCreateService getBeanCreateServiceIntance() {
-        if (beanCreateService == null) {
-            synchronized (beanCreateLock) {
-                if (beanCreateService == null) {
-                    beanCreateService = BeanCreateService();
-                }
-            }
-        }
-        return beanCreateService;
-    }
-
-    /**
      * 创建beanparse服务实例
      * @return
      */
@@ -76,10 +61,25 @@ public class BeanServiceFactory {
         if (beanParseService == null) {
             synchronized (beanParseLock) {
                 if (beanParseService == null) {
-                    beanParseService = BeanParseService();
+                    beanParseService = new BeanParseService(beanContext);
                 }
             }
         }
         return beanParseService;
+    }
+
+    /**
+     * 创建beancreate服务实例
+     * @return
+     */
+    protected BeanCreateService getBeanCreateServiceIntance() {
+        if (beanCreateService == null) {
+            synchronized (beanCreateLock) {
+                if (beanCreateService == null) {
+                    beanCreateService = new BeanCreateService(beanContext);
+                }
+            }
+        }
+        return beanCreateService;
     }
 }

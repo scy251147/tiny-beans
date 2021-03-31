@@ -10,34 +10,49 @@ import java.util.List;
  */
 public class BeanManager {
 
+    /**
+     * 带参构造
+     *
+     * @param configClass
+     */
     public BeanManager(Class configClass) {
 
         //初始化上下文
-        this.beanContext = new BeanContext();
-        this.beanContext.setConfigClass(configClass);
+        BeanContext beanContext = new BeanContext();
+        beanContext.setConfigClass(configClass);
 
         //实例化服务工厂
-        this.beanServiceFactory = new BeanServiceFactory(beanContext);
+        beanServiceFactory = new BeanServiceFactory(beanContext);
 
         //创建bean扫描服务实例
         BeanScanService beanScanService = beanServiceFactory.getBeanScanServiceInstance();
 
+        //执行扫描操作
+        List<Class> classes = beanScanService.scan();
+        beanContext.setClassPool(classes);
+
         //创建bean解析服务实例
         BeanParseService beanParseService = beanServiceFactory.getBeanParseServiceInstance();
 
-        //执行扫描操作
-        List<Class> classes = beanScanService.scan();
+        //创建bean生成服务实例
+        BeanCreateService beanCreateService = beanServiceFactory.getBeanCreateServiceIntance();
 
         //执行解析操作
-        beanParseService.parse(classes);
+        beanParseService.parse();
 
+        //执行创建操作
+        beanCreateService.createSingletonBean();
     }
 
-    //bean上下文
-    private BeanContext beanContext;
-
-    //bean相关服务生成
+    //bean相关服务创建工厂
     private BeanServiceFactory beanServiceFactory;
 
-
+    /**
+     * 获取bean对象
+     * @param beanName
+     * @return
+     */
+    public Object getBean(String beanName) {
+        return beanServiceFactory.getBeanCreateServiceIntance().getBean(beanName);
+    }
 }

@@ -16,6 +16,9 @@ public class BeanContext {
     //bean配置扫描类
     private Class configClass;
 
+    //类文件池
+    private List<Class> classPool = new ArrayList<>();
+
     //bean定义池
     private Map<String, BeanDefinition> beanDefinitionPool = new ConcurrentHashMap<>();
 
@@ -55,5 +58,13 @@ public class BeanContext {
 
     public void setConfigClass(Class configClass) {
         this.configClass = configClass;
+    }
+
+    public List<Class> getClassPool() {
+        return classPool;
+    }
+
+    public void setClassPool(List<Class> classPool) {
+        this.classPool = classPool;
     }
 }

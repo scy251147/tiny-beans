@@ -1,6 +1,7 @@
 package org.tiny.beans.test;
 
 import org.junit.jupiter.api.Test;
+import org.tiny.beans.core.BeanManager;
 import org.tiny.beans.core.bak.BeanContexter;
 import org.tiny.beans.test.service.UserService;
 
@@ -9,9 +10,9 @@ public class BeanTest {
     @Test
     public void test(){
 
-        BeanContexter beanContext = new BeanContexter(BeanConfig.class);
+        BeanManager beanManager = new BeanManager(BeanConfig.class);
 
-        UserService userService = (UserService) beanContext.getBean("userService");
+        UserService userService = (UserService) beanManager.getBean("userService");
 
         //null pinter exception, need check path
 
