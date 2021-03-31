@@ -66,7 +66,7 @@ public class BeanCreateService {
 
             //3. 初始化前处理
             for (BeanPost beanPost : beanContext.getBeanPostAnnotationPool()) {
-                object = beanPost.postProcessBeforeInitialization(beanPost, beanName);
+                object = beanPost.postProcessBeforeInitialization(object, beanName);
             }
 
             //4. 用户自定义初始化
@@ -76,7 +76,7 @@ public class BeanCreateService {
 
             //5. 初始化后处理
             for (BeanPost beanPost : beanContext.getBeanPostAnnotationPool()) {
-                object = beanPost.postProcessAfterInitialization(beanPost, beanName);
+                object = beanPost.postProcessAfterInitialization(object, beanName);
             }
             return object;
         } catch (InstantiationException e) {
@@ -98,6 +98,9 @@ public class BeanCreateService {
      */
     protected Object getBean(String beanName) {
         BeanDefinition beanDefinition = beanContext.getBeanDefinitionPool().get(beanName);
+        if(beanDefinition == null){
+            return null;
+        }
         //原型模式，每次都需要创建bean
         if (beanDefinition.getScopeType() == ScopeType.Prototype) {
             Object bean = createBean(beanName, beanDefinition);

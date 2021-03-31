@@ -32,13 +32,11 @@ public class BeanManager {
 
         //创建bean解析服务实例
         BeanParseService beanParseService = beanServiceFactory.getBeanParseServiceInstance();
-
-        //创建bean生成服务实例
-        BeanCreateService beanCreateService = beanServiceFactory.getBeanCreateServiceIntance();
-
         //执行解析操作
         beanParseService.parse();
 
+        //创建bean生成服务实例
+        BeanCreateService beanCreateService = beanServiceFactory.getBeanCreateServiceIntance();
         //执行创建操作
         beanCreateService.createSingletonBean();
     }

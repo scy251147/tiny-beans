@@ -14,24 +14,12 @@ public class BeanDefinition {
     //原型or单例
     private ScopeType scopeType;
 
-    //懒加载
-    private Boolean lazy;
-
-
     public Class getBeanClass() {
         return beanClass;
     }
 
     public void setBeanClass(Class beanClass) {
         this.beanClass = beanClass;
-    }
-
-    public Boolean getLazy() {
-        return lazy;
-    }
-
-    public void setLazy(Boolean lazy) {
-        this.lazy = lazy;
     }
 
     public ScopeType getScopeType() {
