@@ -1,5 +1,7 @@
 package org.tiny.beans.core;
 
+import org.tiny.beans.core.model.BeanContext;
+
 /**
  * @author shichaoyang
  * @Description: 服务工厂
@@ -9,13 +11,14 @@ public class BeanServiceFactory {
 
     /**
      * 带参构造
-     * @param configClass
+     * @param beanContext
      */
-    public BeanServiceFactory(Class<?> configClass){
-        this.configClass = configClass;
+    public BeanServiceFactory(BeanContext beanContext){
+        this.beanContext = beanContext;
     }
 
-    //TODO 串了这么多类，建议搞个上下文对象
+    //扫描路径配置类
+    private BeanContext beanContext;
 
     //扫描bean服务
     private static volatile BeanScanService beanScanService;
@@ -35,9 +38,6 @@ public class BeanServiceFactory {
     //解析bean服务实例锁
     private static Object beanParseLock = new Object();
 
-    //扫描路径配置类
-    private Class<?> configClass;
-
     /**
      * 创建beanscan服务实例
      * @return
@@ -46,7 +46,7 @@ public class BeanServiceFactory {
         if (beanScanService == null) {
             synchronized (beanScanLock) {
                 if (beanScanService == null) {
-                    beanScanService = new BeanScanService(configClass);
+                    beanScanService = new BeanScanService(beanContext.getConfigClass());
                 }
             }
         }

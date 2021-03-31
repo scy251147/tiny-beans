@@ -1,4 +1,4 @@
-package org.tiny.beans.core;
+package org.tiny.beans.core.bak;
 
 import org.tiny.beans.core.model.BeanDefinition;
 import org.tiny.beans.sdk.annotation.Bean;
@@ -17,9 +17,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class BeanContext {
+public class BeanContexter {
 
-    public BeanContext(Class configClass) {
+    public BeanContexter(Class configClass) {
         //设置配置类
         this.configClass = configClass;
 
@@ -102,7 +102,7 @@ public class BeanContext {
         path = path.replace(".","/");
 
         //利用类加载器获取路径
-        ClassLoader classLoader = BeanContext.class.getClassLoader();
+        ClassLoader classLoader = BeanContexter.class.getClassLoader();
         URL resource = classLoader.getResource(path);
 
         //得到文件夹并加载到classloader中

@@ -1,5 +1,6 @@
 package org.tiny.beans.core;
 
+import org.tiny.beans.core.bak.BeanContexter;
 import org.tiny.beans.sdk.annotation.BeanScan;
 import java.io.File;
 import java.net.URL;
@@ -43,7 +44,7 @@ public class BeanScanService {
         path = path.replace(".", "/");
 
         //利用类加载器获取路径
-        ClassLoader classLoader = BeanContext.class.getClassLoader();
+        ClassLoader classLoader = BeanContexter.class.getClassLoader();
         URL resource = classLoader.getResource(path);
 
         //得到文件夹并加载到classloader中
