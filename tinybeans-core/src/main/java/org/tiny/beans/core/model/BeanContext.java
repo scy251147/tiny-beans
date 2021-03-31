@@ -27,6 +27,9 @@ public class BeanContext {
     //bean带有BeanPost注解池
     private List<BeanPost> beanPostAnnotationPool = new ArrayList<>();
 
+    //bean中Value注解池
+    private Map<String, String> beanValuePool = new ConcurrentHashMap<>();
+
     public Map<String, BeanDefinition> getBeanDefinitionPool() {
         return beanDefinitionPool;
     }
@@ -65,5 +68,13 @@ public class BeanContext {
 
     public void setClassPool(List<Class> classPool) {
         this.classPool = classPool;
+    }
+
+    public Map<String, String> getBeanValuePool() {
+        return beanValuePool;
+    }
+
+    public void setBeanValuePool(Map<String, String> beanValuePool) {
+        this.beanValuePool = beanValuePool;
     }
 }

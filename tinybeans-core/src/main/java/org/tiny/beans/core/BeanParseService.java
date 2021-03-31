@@ -22,24 +22,20 @@ public class BeanParseService {
     private BeanContext beanContext;
 
     /**
-     * 解析类上面的注解
+     * 类解并放到池子中
      */
     protected void parse() {
-
-        //类解析并放到池子中
         for (Class clazz : beanContext.getClassPool()) {
             if (clazz.isAnnotationPresent(Bean.class)) {
                 parseBeanPostAnnotation(clazz);
                 parseScopeAnnotation(clazz);
-                parseLazyAnnotation(clazz);
+                parseValueAnnotation(clazz);
             }
         }
-
-
     }
 
     /**
-     * 处理BeanPost注解
+     * 处理BeanPost接口代理
      * @param clazz
      */
     private void parseBeanPostAnnotation(Class clazz) {
@@ -61,7 +57,7 @@ public class BeanParseService {
     }
 
     /**
-     * 处理Scope注解, 解析原型模式/单例模式
+     * 处理@Scope注解, 解析原型模式/单例模式
      */
     private void parseScopeAnnotation(Class clazz) {
         BeanDefinition beanDefinition = new BeanDefinition();
@@ -84,10 +80,13 @@ public class BeanParseService {
     }
 
     /**
-     * 处理Lazy注解
+     * 处理@Value注解
+     *
+     * 将value对应的字段key+值解析后放到map中，以便于创建bean的时候直接赋值
+     *
      * @param clazz
      */
-    private void parseLazyAnnotation(Class clazz){
-
+    private void parseValueAnnotation(Class clazz){
+        //todo 解析类，拿到@Value值，并将值结果放到beanValuePool中备用
     }
 }
