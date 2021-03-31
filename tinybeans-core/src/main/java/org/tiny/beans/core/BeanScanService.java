@@ -31,6 +31,9 @@ public class BeanScanService {
     //文件路径结束字符
     private static final String STOP_WORDS = ".class";
 
+    //扫描包下的类文件集合
+    private List<String> classFiles = new ArrayList<>();
+
     /**
      * bean扫描并加载
      */
@@ -46,25 +49,42 @@ public class BeanScanService {
         ClassLoader classLoader = BeanContexter.class.getClassLoader();
         URL resource = classLoader.getResource(path);
 
-        //得到文件夹并加载到classloader中
+        //将文件加载到classloader
         File file = new File(resource.getFile());
-        if (file.isDirectory()) {
-            File[] files = file.listFiles();
-            for (File f : files) {
+        List<String> classFiles = findClassFiles(file);
+        for (String classFile : classFiles) {
+            try {
+                Class<?> clazz = classLoader.loadClass(classFile);
+                classList.add(clazz);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return classList;
+    }
+
+    /**
+     * 递归遍历获取.class文件
+     *
+     * @param file
+     * @return
+     */
+    private List<String> findClassFiles(File file) {
+        File[] files = file.listFiles();
+        for (File f : files) {
+            if (f.isFile()) {
                 String absoltePath = f.getAbsolutePath();
                 //寻找类文件，其他文件忽略
                 if (absoltePath.endsWith(STOP_WORDS)) {
                     absoltePath = absoltePath.substring(absoltePath.indexOf(START_WORDS), absoltePath.indexOf(STOP_WORDS));
                     absoltePath = absoltePath.replace("\\", ".");
-                    try {
-                        Class<?> clazz = classLoader.loadClass(absoltePath);
-                        classList.add(clazz);
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
+                    classFiles.add(absoltePath);
                 }
+            } else {
+                findClassFiles(f);
             }
         }
-        return classList;
+        return classFiles;
     }
 }
