@@ -5,7 +5,6 @@ import org.tiny.beans.core.model.BeanContext;
 /**
  * @author shichaoyang
  * @Description: 服务工厂
- * @date 2021-03-31 9:53
  */
 public class BeanServiceFactory {
 

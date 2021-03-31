@@ -2,6 +2,10 @@ package org.tiny.beans.core.model;
 
 import org.tiny.beans.sdk.model.ScopeType;
 
+/**
+ * @author shichaoyang
+ * @Description: bean上下文
+ */
 public class BeanDefinition {
 
     //类对象

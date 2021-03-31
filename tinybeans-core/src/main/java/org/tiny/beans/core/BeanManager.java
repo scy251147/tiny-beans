@@ -6,7 +6,6 @@ import java.util.List;
 /**
  * @author shichaoyang
  * @Description: bean管理
- * @date 2021-03-31 13:35
  */
 public class BeanManager {
 
