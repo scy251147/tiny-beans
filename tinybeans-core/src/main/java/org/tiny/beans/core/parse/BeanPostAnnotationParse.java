@@ -3,7 +3,6 @@ package org.tiny.beans.core.parse;
 import lombok.extern.slf4j.Slf4j;
 import org.tiny.beans.core.model.BeanContext;
 import org.tiny.beans.sdk.func.BeanPost;
-
 import java.lang.reflect.InvocationTargetException;
 
 /**
@@ -12,10 +11,11 @@ import java.lang.reflect.InvocationTargetException;
  * @date 2021-04-01 12:14
  */
 @Slf4j
-public class BeanPostAnnotationParse implements BeanParse{
+public class BeanPostAnnotationParse extends AbstractBeanParse {
 
     /**
      * 处理BeanPost接口代理
+     *
      * @param clazz
      */
     @Override

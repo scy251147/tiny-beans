@@ -28,13 +28,13 @@ public class BeanParseService {
         for (Class clazz : beanContext.getClassPool()) {
             if (clazz.isAnnotationPresent(Bean.class)) {
 
-                List<BeanParse> beanParseList = new ArrayList<>();
+                List<AbstractBeanParse> beanParseList = new ArrayList<>();
                 beanParseList.add(new BeanInitAnnotationParse());
                 beanParseList.add(new BeanPostAnnotationParse());
                 beanParseList.add(new BeanScopeAnnotationParse());
                 beanParseList.add(new BeanValueAnnotationParse());
 
-                for (BeanParse beanParse : beanParseList) {
+                for (AbstractBeanParse beanParse : beanParseList) {
                     beanParse.parse(clazz, beanContext);
                 }
             }

@@ -13,7 +13,7 @@ import org.tiny.beans.sdk.model.ScopeType;
  * @date 2021-04-01 12:15
  */
 @Slf4j
-public class BeanScopeAnnotationParse implements BeanParse{
+public class BeanScopeAnnotationParse extends AbstractBeanParse {
 
     /**
      * 处理@Scope注解, 解析原型模式/单例模式

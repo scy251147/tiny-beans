@@ -9,11 +9,11 @@ import org.tiny.beans.core.model.BeanContext;
  * @date 2021-04-01 12:15
  */
 @Slf4j
-public class BeanValueAnnotationParse implements BeanParse{
+public class BeanValueAnnotationParse extends AbstractBeanParse {
 
     /**
      * 处理@Value注解
-     *
+     * <p>
      * 将value对应的字段key+值解析后放到map中，以便于创建bean的时候直接赋值
      *
      * @param clazz

@@ -11,10 +11,11 @@ import java.lang.reflect.InvocationTargetException;
  * @date 2021-04-01 12:21
  */
 @Slf4j
-public class BeanInitAnnotationParse implements BeanParse{
+public class BeanInitAnnotationParse extends AbstractBeanParse {
 
     /**
      * 处理BeanInit接口代理
+     *
      * @param clazz
      */
     @Override
