@@ -92,8 +92,8 @@ public class BeanCreateService {
         }
 
         //4. 用户自定义初始化
-        if (beanObject instanceof BeanInit) {
-            ((BeanInit) (beanObject)).afterPropertiesSet();
+        for (BeanInit beanInit : beanContext.getBeanInitAnnotationPool()) {
+            beanInit.afterPropertiesSet();
         }
 
         //5. 初始化后处理

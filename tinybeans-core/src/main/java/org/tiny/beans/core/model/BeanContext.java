@@ -1,5 +1,6 @@
 package org.tiny.beans.core.model;
 
+import org.tiny.beans.sdk.func.BeanInit;
 import org.tiny.beans.sdk.func.BeanPost;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,9 @@ public class BeanContext {
 
     //bean带有BeanPost注解池
     private List<BeanPost> beanPostAnnotationPool = new ArrayList<>();
+
+    //bean带有BeanInit注解池
+    private List<BeanInit> beanInitAnnotationPool = new ArrayList<>();
 
     //bean中Value注解池
     private Map<String, String> beanValuePool = new ConcurrentHashMap<>();
@@ -76,5 +80,13 @@ public class BeanContext {
 
     public void setBeanValuePool(Map<String, String> beanValuePool) {
         this.beanValuePool = beanValuePool;
+    }
+
+    public List<BeanInit> getBeanInitAnnotationPool() {
+        return beanInitAnnotationPool;
+    }
+
+    public void setBeanInitAnnotationPool(List<BeanInit> beanInitAnnotationPool) {
+        this.beanInitAnnotationPool = beanInitAnnotationPool;
     }
 }
