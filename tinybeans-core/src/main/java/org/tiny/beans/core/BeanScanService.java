@@ -1,5 +1,6 @@
 package org.tiny.beans.core;
 
+import lombok.extern.slf4j.Slf4j;
 import org.tiny.beans.sdk.annotation.BeanScan;
 import java.io.File;
 import java.net.URL;
@@ -10,6 +11,7 @@ import java.util.List;
  * @author shichaoyang
  * @Description: bean扫描器
  */
+@Slf4j
 public class BeanScanService {
 
     /**

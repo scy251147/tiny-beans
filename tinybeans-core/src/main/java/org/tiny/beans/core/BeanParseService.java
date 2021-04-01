@@ -1,5 +1,6 @@
 package org.tiny.beans.core;
 
+import lombok.extern.slf4j.Slf4j;
 import org.tiny.beans.core.model.BeanContext;
 import org.tiny.beans.core.parse.*;
 import org.tiny.beans.sdk.annotation.Bean;
@@ -10,6 +11,7 @@ import java.util.List;
  * @author shichaoyang
  * @Description: bean解析annotation并处理
  */
+@Slf4j
 public class BeanParseService {
 
     public BeanParseService(BeanContext beanContext) {

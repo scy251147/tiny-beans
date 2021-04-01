@@ -1,5 +1,6 @@
 package org.tiny.beans.core.parse;
 
+import lombok.extern.slf4j.Slf4j;
 import org.tiny.beans.core.model.BeanContext;
 
 /**
@@ -7,6 +8,7 @@ import org.tiny.beans.core.model.BeanContext;
  * @Description: value注解解析
  * @date 2021-04-01 12:15
  */
+@Slf4j
 public class BeanValueAnnotationParse implements BeanParse{
 
     /**

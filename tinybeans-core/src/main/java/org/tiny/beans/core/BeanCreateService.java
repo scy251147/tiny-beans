@@ -1,5 +1,6 @@
 package org.tiny.beans.core;
 
+import lombok.extern.slf4j.Slf4j;
 import org.tiny.beans.core.model.BeanContext;
 import org.tiny.beans.core.model.BeanDefinition;
 import org.tiny.beans.sdk.annotation.Inject;
@@ -13,6 +14,7 @@ import java.lang.reflect.InvocationTargetException;
  * @author shichaoyang
  * @Description: bean处理器
  */
+@Slf4j
 public class BeanCreateService {
 
     /**

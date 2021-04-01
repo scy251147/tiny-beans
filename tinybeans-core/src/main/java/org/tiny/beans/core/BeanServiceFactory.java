@@ -1,11 +1,13 @@
 package org.tiny.beans.core;
 
+import lombok.extern.slf4j.Slf4j;
 import org.tiny.beans.core.model.BeanContext;
 
 /**
  * @author shichaoyang
  * @Description: 服务工厂
  */
+@Slf4j
 public class BeanServiceFactory {
 
     /**

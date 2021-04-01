@@ -1,5 +1,6 @@
 package org.tiny.beans.core.parse;
 
+import lombok.extern.slf4j.Slf4j;
 import org.tiny.beans.core.model.BeanContext;
 import org.tiny.beans.sdk.func.BeanInit;
 import java.lang.reflect.InvocationTargetException;
@@ -9,6 +10,7 @@ import java.lang.reflect.InvocationTargetException;
  * @Description:
  * @date 2021-04-01 12:21
  */
+@Slf4j
 public class BeanInitAnnotationParse implements BeanParse{
 
     /**

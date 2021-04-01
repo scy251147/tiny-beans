@@ -1,5 +1,6 @@
 package org.tiny.beans.core;
 
+import lombok.extern.slf4j.Slf4j;
 import org.tiny.beans.core.model.BeanContext;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -8,6 +9,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author shichaoyang
  * @Description: bean管理
  */
+@Slf4j
 public class BeanManager {
 
     /**
