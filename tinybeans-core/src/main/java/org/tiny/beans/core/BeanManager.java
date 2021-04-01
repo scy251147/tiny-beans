@@ -16,6 +16,7 @@ public class BeanManager {
      * @param configClass
      */
     public BeanManager(Class configClass) {
+        //锁止
         if(initFlag.compareAndSet(false,true)) {
             //初始化上下文
             BeanContext beanContext = new BeanContext();
