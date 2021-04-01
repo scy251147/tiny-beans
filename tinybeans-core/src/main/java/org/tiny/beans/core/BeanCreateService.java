@@ -89,19 +89,23 @@ public class BeanCreateService {
         injectBeanSet(beanClass, beanObject);
 
         //3. 初始化前处理
-        for (BeanPost beanPost : beanContext.getBeanPostAnnotationPool()) {
-            beanObject = beanPost.postProcessBeforeInitialization(beanObject, beanName);
+        BeanPost beanPostBefore = beanContext.getBeanPostAnnotationPool().get(beanName);
+        if (beanPostBefore != null) {
+            beanObject = beanPostBefore.postProcessBeforeInitialization(beanObject, beanName);
         }
 
         //4. 用户自定义初始化
-        for (BeanInit beanInit : beanContext.getBeanInitAnnotationPool()) {
+        BeanInit beanInit = beanContext.getBeanInitAnnotationPool().get(beanName);
+        if (beanInit != null) {
             beanInit.afterPropertiesSet();
         }
 
         //5. 初始化后处理
-        for (BeanPost beanPost : beanContext.getBeanPostAnnotationPool()) {
-            beanObject = beanPost.postProcessAfterInitialization(beanObject, beanName);
+        BeanPost beanPostAfter = beanContext.getBeanPostAnnotationPool().get(beanName);
+        if (beanPostAfter != null) {
+            beanObject = beanPostAfter.postProcessAfterInitialization(beanObject, beanName);
         }
+
         return beanObject;
     }
 

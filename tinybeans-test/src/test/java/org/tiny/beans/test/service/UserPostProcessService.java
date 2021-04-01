@@ -11,7 +11,7 @@ import org.tiny.beans.sdk.func.BeanPost;
 public class UserPostProcessService implements BeanPost {
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) {
-        //System.out.println("初始化前，对象是原来的bean"+bean);
+        System.out.println("初始化前，对象是原来的bean"+bean);
         return bean;
     }
 

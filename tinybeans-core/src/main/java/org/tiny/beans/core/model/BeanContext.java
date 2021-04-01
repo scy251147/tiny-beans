@@ -28,10 +28,10 @@ public class BeanContext {
     private Map<String, Object> beanSingletonPool = new ConcurrentHashMap<>();
 
     //bean带有BeanPost注解池
-    private List<BeanPost> beanPostAnnotationPool = new ArrayList<>();
+    private Map<String, BeanPost> beanPostAnnotationPool = new ConcurrentHashMap<>();
 
     //bean带有BeanInit注解池
-    private List<BeanInit> beanInitAnnotationPool = new ArrayList<>();
+    private Map<String, BeanInit> beanInitAnnotationPool = new ConcurrentHashMap<>();
 
     //bean中Value注解池
     private Map<String, String> beanValuePool = new ConcurrentHashMap<>();

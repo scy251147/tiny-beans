@@ -2,6 +2,7 @@ package org.tiny.beans.core.parse;
 
 import lombok.extern.slf4j.Slf4j;
 import org.tiny.beans.core.model.BeanContext;
+import org.tiny.beans.sdk.annotation.Bean;
 import org.tiny.beans.sdk.func.BeanInit;
 import java.lang.reflect.InvocationTargetException;
 
@@ -23,7 +24,11 @@ public class BeanInitAnnotationParse extends AbstractBeanParse {
         if (BeanInit.class.isAssignableFrom(clazz)) {
             try {
                 BeanInit o = (BeanInit) clazz.getDeclaredConstructor().newInstance();
-                beanContext.getBeanInitAnnotationPool().add(o);
+
+                Bean beanAnnotation = (Bean) clazz.getAnnotation(Bean.class);
+                String beanName = beanAnnotation.value();
+
+                beanContext.getBeanInitAnnotationPool().put(beanName, o);
             } catch (InstantiationException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {

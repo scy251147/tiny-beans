@@ -12,6 +12,8 @@ public class BeanTest {
     public void test() {
 
         BeanManager beanManager = new BeanManager(BeanConfig.class);
+        System.out.println(beanManager);
+
         UserService userService = (UserService) beanManager.getBean("userService");
         System.out.println(userService);
         System.out.println(userService.print());
