@@ -26,7 +26,7 @@ public class BeanScanService {
     //配置文件
     private Class configClass;
 
-    //文件路径开始字符
+    //文件路径开始字符 TODO 如果用户的包不是org开头的呢？
     private static final String START_WORDS = "org";
 
     //文件路径结束字符
