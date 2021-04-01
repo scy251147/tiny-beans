@@ -14,6 +14,7 @@ public class BeanTest {
         BeanManager beanManager = new BeanManager(BeanConfig.class);
         UserService userService = (UserService) beanManager.getBean("userService");
         System.out.println(userService);
+        System.out.println(userService.print());
 
         UserPostProcessService userPostProcessService = (UserPostProcessService) beanManager.getBean("userPostProcessService");
         System.out.println(userPostProcessService);
