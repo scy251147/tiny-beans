@@ -47,7 +47,7 @@ public class BeanServiceFactory {
         if (beanScanService == null) {
             synchronized (beanScanLock) {
                 if (beanScanService == null) {
-                    beanScanService = new BeanScanService(beanContext.getConfigClass());
+                    beanScanService = new BeanScanService(beanContext);
                 }
             }
         }

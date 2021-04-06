@@ -12,6 +12,16 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface BeanScan {
 
-    String value() default "";
+    /**
+     * 包扫描路径
+     * @return
+     */
+    String packagePath() default "";
+
+    /**
+     * 包配置文件
+     * @return
+     */
+    String packageConfig() default "";
 
 }

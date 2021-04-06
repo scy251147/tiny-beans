@@ -1,11 +1,14 @@
 package org.tiny.beans.core;
 
 import lombok.extern.slf4j.Slf4j;
+import org.tiny.beans.core.model.BeanContext;
 import org.tiny.beans.sdk.annotation.BeanScan;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author shichaoyang
@@ -17,14 +20,14 @@ public class BeanScanService {
     /**
      * 带参构造
      *
-     * @param configClass
+     * @param beanContext
      */
-    public BeanScanService(Class<?> configClass) {
-        this.configClass = configClass;
+    public BeanScanService(BeanContext beanContext) {
+        this.beanContext = beanContext;
     }
 
-    //配置文件
-    private Class configClass;
+    //上下文对象
+    private BeanContext beanContext;
 
     //文件路径开始字符 TODO 如果用户的包不是org开头的呢？
     private static final String START_WORDS = "org";
@@ -38,12 +41,38 @@ public class BeanScanService {
     /**
      * bean扫描并加载
      */
-    protected List<Class> scan() {
+    protected void scan() {
+
+        //加载配置文件并放到上下文
+        loadPackageConfig();
+
+        //加载类文件并放到上下文
+        List<Class> classes = loadPackageClass();
+        beanContext.setClassPool(classes);
+    }
+
+    /**
+     * 加载包中的配置文件
+     * @return
+     */
+    private void loadPackageConfig() {
+        Map<String, String> configMap = new ConcurrentHashMap<>();
+        BeanScan beanScanAnnotation = (BeanScan) beanContext.getConfigClass().getAnnotation(BeanScan.class);
+        String packageConfig = beanScanAnnotation.packageConfig();
+        //TODO biz
+        beanContext.setConfigPool(configMap);
+    }
+
+    /**
+     * 加载包中的类文件
+     * @return
+     */
+    private List<Class> loadPackageClass(){
         List<Class> classList = new ArrayList<>();
+        BeanScan beanScanAnnotation = (BeanScan) beanContext.getConfigClass().getAnnotation(BeanScan.class);
 
         //扫描包路径
-        BeanScan beanScanAnnotation = (BeanScan) configClass.getAnnotation(BeanScan.class);
-        String path = beanScanAnnotation.value();
+        String path = beanScanAnnotation.packagePath();
         path = path.replace(".", "/");
 
         //利用类加载器获取路径

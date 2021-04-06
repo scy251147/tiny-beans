@@ -21,6 +21,9 @@ public class BeanContext {
     //类文件池
     private List<Class> classPool = new ArrayList<>();
 
+    //配置节点池
+    private Map<String, String> configPool = new ConcurrentHashMap<>();
+
     //bean定义池
     private Map<String, BeanDefinition> beanDefinitionPool = new ConcurrentHashMap<>();
 
