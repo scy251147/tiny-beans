@@ -1,9 +1,12 @@
 package org.tiny.beans.core;
 
+import com.sun.xml.internal.ws.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.tiny.beans.core.exception.TbException;
 import org.tiny.beans.core.model.BeanContext;
 import org.tiny.beans.core.model.BeanDefinition;
 import org.tiny.beans.sdk.annotation.Inject;
+import org.tiny.beans.sdk.annotation.Value;
 import org.tiny.beans.sdk.func.BeanInit;
 import org.tiny.beans.sdk.func.BeanPost;
 import org.tiny.beans.sdk.model.ScopeType;
@@ -32,7 +35,7 @@ public class BeanCreateService {
     /**
      * 创建单例bean实例，原型bean实例无需创建，因为每次都会new新的出来
      */
-    protected void createSingletonBean() {
+    protected void createSingletonBean() throws TbException {
         for (String beanName : beanContext.getBeanDefinitionPool().keySet()) {
             BeanDefinition beanDefinition = beanContext.getBeanDefinitionPool().get(beanName);
             //创建单例bean
@@ -51,7 +54,7 @@ public class BeanCreateService {
      * @param beanName
      * @return
      */
-    protected Object getBean(String beanName) {
+    protected Object getBean(String beanName) throws TbException {
         BeanDefinition beanDefinition = beanContext.getBeanDefinitionPool().get(beanName);
         if (beanDefinition == null) {
             return null;
@@ -80,27 +83,30 @@ public class BeanCreateService {
      * @param beanDefinition
      * @return
      */
-    private Object createBean(String beanName, BeanDefinition beanDefinition) {
+    private Object createBean(String beanName, BeanDefinition beanDefinition) throws TbException {
         //1. 类实例化
         Class beanClass = beanDefinition.getBeanClass();
         Object beanObject = newBeanInstance(beanClass);
 
-        //2. 属性填充, 将userService中的user对象填充进去
+        //2. inject注入填充, 比如将userService中的user对象填充进去
         injectBeanSet(beanClass, beanObject);
 
-        //3. 初始化前处理
+        //3. value注入填充
+        injectValueSet(beanClass, beanObject);
+
+        //4. 初始化前处理
         BeanPost beanPostBefore = beanContext.getBeanPostAnnotationPool().get(beanName);
         if (beanPostBefore != null) {
             beanObject = beanPostBefore.postProcessBeforeInitialization(beanObject, beanName);
         }
 
-        //4. 用户自定义初始化
+        //5. 用户自定义初始化
         BeanInit beanInit = beanContext.getBeanInitAnnotationPool().get(beanName);
         if (beanInit != null) {
             beanInit.afterPropertiesSet();
         }
 
-        //5. 初始化后处理
+        //6. 初始化后处理
         BeanPost beanPostAfter = beanContext.getBeanPostAnnotationPool().get(beanName);
         if (beanPostAfter != null) {
             beanObject = beanPostAfter.postProcessAfterInitialization(beanObject, beanName);
@@ -135,7 +141,7 @@ public class BeanCreateService {
      * @param beanClass
      * @param object
      */
-    private void injectBeanSet(Class beanClass, Object object) {
+    private void injectBeanSet(Class beanClass, Object object) throws TbException {
         Field[] declaredFields = beanClass.getDeclaredFields();
         for (Field declaredField : declaredFields) {
             if (declaredField.isAnnotationPresent(Inject.class)) {
@@ -144,10 +150,58 @@ public class BeanCreateService {
                 try {
                     declaredField.set(object, bean);
                 } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+                    throw new TbException("inject bean error, bean class :" + beanClass, e);
                 }
             }
         }
     }
 
+    /**
+     * 将beanClass中的value字段的属性赋值
+     * @param beanClass
+     * @param object
+     */
+    private void injectValueSet(Class beanClass, Object object) throws TbException {
+        Field[] declaredFields = beanClass.getDeclaredFields();
+        for (Field declaredField : declaredFields) {
+            if (declaredField.isAnnotationPresent(Value.class)) {
+                //获取@Value注解的key
+                String filedKey = declaredField.getAnnotation(Value.class).value();
+                //获取@Value注解的值
+                String fieldVal = beanContext.getConfigPool().get(filedKey);
+                if (fieldVal == null) {
+                    throw new TbException("can't find config node:" + filedKey, null);
+                }
+                //类型转换
+                declaredField.setAccessible(true);
+                valueSetByType(declaredField, object, filedKey, fieldVal);
+            }
+        }
+    }
+
+    /**
+     * 根据数据类型进行值设置
+     * @param declaredField
+     * @param object
+     * @param filedKey
+     * @param fieldVal
+     * @throws TbException
+     */
+    private void valueSetByType(Field declaredField, Object object, String filedKey, String fieldVal) throws TbException {
+        try {
+            if (declaredField.getType().getName().equals("int")) {
+                declaredField.set(object, Integer.parseInt(fieldVal));
+            } else if (declaredField.getType().getName().equals("string")) {
+                declaredField.set(object, fieldVal);
+            } else if (declaredField.getType().getName().equals("boolean")) {
+                declaredField.set(object, Boolean.parseBoolean(fieldVal));
+            } else if (declaredField.getType().getName().equals("long")) {
+                declaredField.set(object, Long.parseLong(fieldVal));
+            } else {
+                declaredField.set(object, fieldVal);
+            }
+        } catch (IllegalAccessException e) {
+            throw new TbException("inject config value error, config node:" + filedKey, e);
+        }
+    }
 }

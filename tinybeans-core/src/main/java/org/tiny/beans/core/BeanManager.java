@@ -53,7 +53,7 @@ public class BeanManager {
      * @param beanName
      * @return
      */
-    public Object getBean(String beanName) {
+    public Object getBean(String beanName) throws TbException {
         return beanServiceFactory.getBeanCreateServiceIntance().getBean(beanName);
     }
 }
