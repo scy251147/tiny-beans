@@ -31,13 +31,13 @@ public class BeanPostAnnotationParse extends AbstractBeanParse {
 
                 beanContext.getBeanPostAnnotationPool().put(beanName, o);
             } catch (InstantiationException e) {
-                e.printStackTrace();
+                log.error("new bean instance error", e);
             } catch (IllegalAccessException e) {
-                e.printStackTrace();
+                log.error("new bean instance error", e);
             } catch (InvocationTargetException e) {
-                e.printStackTrace();
+                log.error("new bean instance error", e);
             } catch (NoSuchMethodException e) {
-                e.printStackTrace();
+                log.error("new bean instance error", e);
             }
         }
     }

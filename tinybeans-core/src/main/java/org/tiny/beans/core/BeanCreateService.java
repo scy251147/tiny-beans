@@ -1,6 +1,5 @@
 package org.tiny.beans.core;
 
-import com.sun.xml.internal.ws.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.tiny.beans.core.exception.TbException;
 import org.tiny.beans.core.model.BeanContext;
@@ -125,13 +124,13 @@ public class BeanCreateService {
             Object object = beanClass.getDeclaredConstructor().newInstance();
             return object;
         } catch (InstantiationException e) {
-            e.printStackTrace();
+            log.error("new bean instance error", e);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            log.error("new bean instance error", e);
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
+            log.error("new bean instance error", e);
         } catch (NoSuchMethodException e) {
-            e.printStackTrace();
+            log.error("new bean instance error", e);
         }
         return null;
     }

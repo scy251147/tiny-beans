@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author shichaoyang
@@ -111,7 +110,7 @@ public class BeanScanService {
                 Class<?> clazz = classLoader.loadClass(classFile);
                 beanContext.getClassPool().add(clazz);
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+                log.error("can't find class", e);
             }
         }
     }
