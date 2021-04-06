@@ -6,7 +6,6 @@ import org.tiny.beans.core.exception.TbIOException;
 import org.tiny.beans.core.model.BeanContext;
 import org.tiny.beans.sdk.annotation.BeanScan;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
