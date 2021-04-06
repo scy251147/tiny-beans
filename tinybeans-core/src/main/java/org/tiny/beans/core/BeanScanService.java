@@ -46,20 +46,17 @@ public class BeanScanService {
     protected void scan() throws TbIOException, TbException {
 
         //加载配置文件并放到上下文
-        Map<String, String> configPool = loadPackageConfig();
-        beanContext.setConfigPool(configPool);
+        loadPackageConfig();
 
         //加载类文件并放到上下文
-        List<Class> classes = loadPackageClass();
-        beanContext.setClassPool(classes);
+        loadPackageClass();
     }
 
     /**
      * 加载包中的配置文件
      * @return
      */
-    private Map<String, String> loadPackageConfig() throws TbIOException, TbException {
-        Map<String, String> configPool = new ConcurrentHashMap<>();
+    private void loadPackageConfig() throws TbIOException, TbException {
         BeanScan beanScanAnnotation = (BeanScan) beanContext.getConfigClass().getAnnotation(BeanScan.class);
         String packageConfig = beanScanAnnotation.packageConfig();
         Properties properties = new Properties();
@@ -89,15 +86,13 @@ public class BeanScanService {
                 }
             }
         }
-        return configPool;
     }
 
     /**
      * 加载包中的类文件
      * @return
      */
-    private List<Class> loadPackageClass(){
-        List<Class> classList = new ArrayList<>();
+    private void loadPackageClass(){
         BeanScan beanScanAnnotation = (BeanScan) beanContext.getConfigClass().getAnnotation(BeanScan.class);
 
         //扫描包路径
@@ -114,13 +109,11 @@ public class BeanScanService {
         for (String classFile : classFiles) {
             try {
                 Class<?> clazz = classLoader.loadClass(classFile);
-                classList.add(clazz);
+                beanContext.getClassPool().add(clazz);
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }
-
-        return classList;
     }
 
     /**
