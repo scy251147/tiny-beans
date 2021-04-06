@@ -1,6 +1,8 @@
 package org.tiny.beans.core;
 
 import lombok.extern.slf4j.Slf4j;
+import org.tiny.beans.core.exception.TbException;
+import org.tiny.beans.core.exception.TbIOException;
 import org.tiny.beans.core.model.BeanContext;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -16,7 +18,7 @@ public class BeanManager {
      *
      * @param configClass
      */
-    public BeanManager(Class configClass) {
+    public BeanManager(Class configClass) throws TbIOException, TbException {
         //锁止
         if (initFlag.compareAndSet(false, true)) {
             //初始化上下文

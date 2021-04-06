@@ -2,6 +2,8 @@ package org.tiny.beans.test;
 
 import org.junit.jupiter.api.Test;
 import org.tiny.beans.core.BeanManager;
+import org.tiny.beans.core.exception.TbException;
+import org.tiny.beans.core.exception.TbIOException;
 import org.tiny.beans.test.model.User;
 import org.tiny.beans.test.service.UserPostProcessService;
 import org.tiny.beans.test.service.UserService;
@@ -9,7 +11,7 @@ import org.tiny.beans.test.service.UserService;
 public class BeanTest {
 
     @Test
-    public void test() {
+    public void test() throws TbIOException, TbException {
 
         BeanManager beanManager = new BeanManager(BeanConfig.class);
         System.out.println(beanManager);

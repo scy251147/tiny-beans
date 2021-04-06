@@ -1,13 +1,16 @@
 package org.tiny.beans.core;
 
 import lombok.extern.slf4j.Slf4j;
+import org.tiny.beans.core.exception.TbException;
+import org.tiny.beans.core.exception.TbIOException;
 import org.tiny.beans.core.model.BeanContext;
 import org.tiny.beans.sdk.annotation.BeanScan;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -41,10 +44,11 @@ public class BeanScanService {
     /**
      * bean扫描并加载
      */
-    protected void scan() {
+    protected void scan() throws TbIOException, TbException {
 
         //加载配置文件并放到上下文
-        loadPackageConfig();
+        Map<String, String> configPool = loadPackageConfig();
+        beanContext.setConfigPool(configPool);
 
         //加载类文件并放到上下文
         List<Class> classes = loadPackageClass();
@@ -55,12 +59,40 @@ public class BeanScanService {
      * 加载包中的配置文件
      * @return
      */
-    private void loadPackageConfig() {
-        Map<String, String> configMap = new ConcurrentHashMap<>();
+    private Map<String, String> loadPackageConfig() throws TbIOException, TbException {
+        Map<String, String> configPool = new ConcurrentHashMap<>();
         BeanScan beanScanAnnotation = (BeanScan) beanContext.getConfigClass().getAnnotation(BeanScan.class);
         String packageConfig = beanScanAnnotation.packageConfig();
         //TODO biz
-        beanContext.setConfigPool(configMap);
+        Properties properties = new Properties();
+        InputStream inputStream = null;
+        try {
+            inputStream = ClassLoader.getSystemResourceAsStream(packageConfig);
+            properties.load(inputStream);
+            Enumeration enumeration = properties.propertyNames();
+            while (enumeration.hasMoreElements()) {
+                String strKey = (String) enumeration.nextElement();
+                String strVal = properties.getProperty(strKey);
+                System.out.println(strKey + "=" + strVal);
+                if (!beanContext.getConfigPool().containsKey(strKey)) {
+                    beanContext.getConfigPool().put(strKey, strVal);
+                }else{
+                    throw new TbException("found duplicate config node", null);
+                }
+            }
+        } catch (IOException e) {
+            log.error("exception when handle config file", e);
+            throw new TbIOException("exception when handling config file", e);
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    log.error("exception when close config file stream", e);
+                }
+            }
+        }
+        return configPool;
     }
 
     /**
