@@ -63,7 +63,6 @@ public class BeanScanService {
         Map<String, String> configPool = new ConcurrentHashMap<>();
         BeanScan beanScanAnnotation = (BeanScan) beanContext.getConfigClass().getAnnotation(BeanScan.class);
         String packageConfig = beanScanAnnotation.packageConfig();
-        //TODO biz
         Properties properties = new Properties();
         InputStream inputStream = null;
         try {
@@ -73,7 +72,6 @@ public class BeanScanService {
             while (enumeration.hasMoreElements()) {
                 String strKey = (String) enumeration.nextElement();
                 String strVal = properties.getProperty(strKey);
-                System.out.println(strKey + "=" + strVal);
                 if (!beanContext.getConfigPool().containsKey(strKey)) {
                     beanContext.getConfigPool().put(strKey, strVal);
                 }else{

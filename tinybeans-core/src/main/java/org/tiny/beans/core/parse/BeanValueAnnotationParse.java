@@ -2,6 +2,13 @@ package org.tiny.beans.core.parse;
 
 import lombok.extern.slf4j.Slf4j;
 import org.tiny.beans.core.model.BeanContext;
+import org.tiny.beans.core.model.BeanDefinition;
+import org.tiny.beans.sdk.annotation.Bean;
+import org.tiny.beans.sdk.annotation.Inject;
+import org.tiny.beans.sdk.annotation.Scope;
+import org.tiny.beans.sdk.model.ScopeType;
+
+import java.lang.reflect.Field;
 
 /**
  * @author shichaoyang
