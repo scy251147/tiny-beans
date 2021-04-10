@@ -11,7 +11,7 @@ It's easy to use, Spring like mechanism can save your time.
 
 First of first, we need a bean scan config class to locate the package and config file:
 
-```
+```java
 package org.tiny.beans.test;
 
 import org.tiny.beans.sdk.annotation.BeanScan;
@@ -22,14 +22,14 @@ import org.tiny.beans.sdk.annotation.BeanScan;
 ```
 
 From above code sample we can see that the defined package scan path is org.tiny.beans.test, while the config file is config.properties.
-These two configs will enable us to search the classes and config files. If in your project, there is no config file needed, we can ignore the packageConfig propertity.
+These two configs will enable us to search the classes and config files, be care that packagePath property is a must, but packageConfig property can be ignored if no need.
 
 ### Bean setting:
 
 When we want to create the instance of beans, we can use the @Bean annotation along with the specified bean name. When tomcat or other container startup, it will search the beans by this annotation and create the instance.
 If we want prototype beans, we can add @Scope along with ScopeType.Prototype to go, while singleton beans goes by default.
 
-```
+```java
 @Bean("userService")
 @Scope(ScopeType.Prototype)
 public class UserService implements BeanInit {
@@ -64,7 +64,7 @@ BeanInit interface to perform the afterPropertiesSet function;
 BeanPost interface to perform the postProcessBeforeInitialization and postProcessAfterInitialization functionality, 
 but the most powerful skill for this interface is perform dynamic proxy, code below:
 
-```
+```java
 package org.tiny.beans.test.service;
 
 import org.tiny.beans.sdk.annotation.Bean;
