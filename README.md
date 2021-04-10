@@ -11,11 +11,12 @@ It's easy to use, Spring like mechanism can save your time.
 
 First of first, we need a bean scan config class to locate the package and config file:
 
-'package org.tiny.beans.test;
+``
+package org.tiny.beans.test;
 
- import org.tiny.beans.sdk.annotation.BeanScan;
+import org.tiny.beans.sdk.annotation.BeanScan;
 
- @BeanScan(packagePath = "org.tiny.beans.test", packageConfig = "config.properties")
- public class BeanConfig {
- }
-'
+@BeanScan(packagePath = "org.tiny.beans.test", packageConfig = "config.properties")
+    public class BeanConfig {
+}
+``
